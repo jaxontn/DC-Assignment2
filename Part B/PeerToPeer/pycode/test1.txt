@@ -1,0 +1,1 @@
+def test_func(): return 8 * 7

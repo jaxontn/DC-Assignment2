@@ -1,0 +1,75 @@
+html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+    /*NEW BELOW:*/
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+div#header {
+    background-image: url(../images/CurtinLogo.png);
+    background-size: 1024px 150px;
+    height: 150px;
+}
+
+div#navigation ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: red;
+}
+
+div#navigation li {
+    float: left;
+}
+
+    div#navigation li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 16px;
+        text-decoration: none;
+    }
+
+        div#navigation li a:hover {
+            background-color: #111111;
+        }
+
+div#main {
+    background-color: palegreen;
+    height: 700px;
+}
+
+
+.containers { /*NEW*/
+    width: auto;
+    padding: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #87CEEB;
+}
+
+.containers .container { /*NEW*/
+    display: none;
+}
+
+.containers .container.is-active { /*NEW*/
+    display: block;
+}

@@ -1,0 +1,29 @@
+﻿<Window x:Class="ClientDesktopApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientDesktopApp"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="480" Width="971">
+    <Grid>
+        <Button x:Name="OpenFileBtn" Content="Open Code File" HorizontalAlignment="Left" Margin="40,202,0,0" VerticalAlignment="Top" Click="OpenFileBtn_Click"/>
+        <Label x:Name="filePathLabel" Content="File path:" Margin="21,227,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="58"/>
+        <TextBox x:Name="codeBox" HorizontalAlignment="Left" Margin="21,37,0,0" TextWrapping="Wrap" Text="def test_func(): return 8 * 7" VerticalAlignment="Top" Width="326" Height="129"/>
+        <Button x:Name="AddJobBtn" Content="Add Job" HorizontalAlignment="Left" Margin="352,146,0,0" VerticalAlignment="Top" Click="AddJobBtn_Click"/>
+        <Label Content="Upload Code from a file:" HorizontalAlignment="Left" Margin="21,171,0,0" VerticalAlignment="Top"/>
+        <Rectangle HorizontalAlignment="Left" Height="465" Margin="410,0,0,0" Stroke="Black" VerticalAlignment="Center" Width="19"/>
+        <Label Content="FOR other client to work on the jobs" HorizontalAlignment="Left" Margin="17,-6,0,0" VerticalAlignment="Top"/>
+        <Label Content="Results:" Margin="17,272,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="194"/>
+        <Label Content="FROM other clients to work on the jobs" HorizontalAlignment="Left" Margin="434,-6,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="TotalJobsLabel" Content="Total Jobs:" HorizontalAlignment="Left" Margin="484,280,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="CompletedJobsLabel" Content="Jobs Completed:" HorizontalAlignment="Left" Margin="451,311,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RemainingJobsLabel" Content="Jobs Remaining:" HorizontalAlignment="Left" Margin="453,342,0,0" VerticalAlignment="Top"/>
+        <Label Content="STEP 1 - START CLEINT" HorizontalAlignment="Left" Margin="246,212,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="StartClientBtn" Content="START THE CLIENT" Margin="260,240,0,0" VerticalAlignment="Top" Click="StartClientBtn_Click" HorizontalAlignment="Left" Width="102"/>
+        <ListBox x:Name="OtherClientListBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="451,37,0,268" HorizontalAlignment="Left" Width="338"/>
+        <ListBox x:Name="ResultListBox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="21,303,0,34" HorizontalAlignment="Left" Width="338"/>
+        <Button x:Name="ConnectOtherClientBtn" Content="Connect with Selected Client" HorizontalAlignment="Left" Margin="451,220,0,0" VerticalAlignment="Top" Click="ConnectOtherClientBtn_Click"/>
+
+    </Grid>
+</Window>

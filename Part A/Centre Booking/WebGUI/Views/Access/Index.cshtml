@@ -1,0 +1,534 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    @using WebGUI.Models;
+    @model IEnumerable<Centre>;
+}
+<section class="containers">
+    <div class="container is-active" data-container="1">
+        <form>
+            <input type="text" id="AdminUsername" name="AdminUsername" placeholder="Username" />
+            <input type="password" id="AdminPassword" name="AdminPassword" placeholder="Password" />
+        </form>
+
+        <button id="login" onclick="login()">Login (For Admin)</button>
+        <button id="user" onclick="user()">User</button>
+    </div>
+
+
+        <div class="container" data-container="2">
+        <h1>Choose an option:</h1>
+        <button id="showAllCentres" onclick="showAllCentres()">Show All Centres</button>
+        <button id="addNewCentre" onclick="addNewCentre()">Add a New Centre</button>
+        <button id="showCentreBooking" onclick="showCentreBooking()">Show Centre Booking</button>
+        
+    </div>
+
+
+    <div class="container" data-container="3">
+        <h1>All Centres:</h1>
+        
+        <div class="tableview">
+            <table id="centres-table" class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Centre Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>default</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <button id="backButton" onclick="backButton('2')">Back</button>
+        
+    </div>
+
+    <div class="container" data-container="4">
+        <h1>Add a Centre Name:</h1>
+        <input type="text" id="CentreName" name="CentreName" placeholder="Centre Name" />
+        <button id="addCentre" onclick="addCentre()">ADD Centre</button>
+        <button id="backButton" onclick="backButton('2')">Back</button>
+    </div>
+
+    <div class="container" data-container="5">
+        <h1>Search for Booking list based on specific centre:</h1>
+        <input type="text" id="selectedCentre" name="selectedCentre" placeholder="Centre Name" />
+        <button id="getCentreBooking" onclick="getCentreBooking()">Get Booking List</button>
+        <button id="backButton" onclick="backButton('2')">Back</button>
+
+        <div class="tableview">
+            <table id="bookings-table" class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Centre Name</th>
+                        <th>Booking Person Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Miami</td>
+                        <td>Jaxon</td>
+                        <td>10/20/2022 07:27:39</td>
+                        <td>10/20/2022 08:27:39</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container" data-container="6">
+        <h1>Choose an option:</h1>
+        <button id="showAllCentres" onclick="showAllCentres()">Show All Centres</button>
+        <button id="searchForCentre" onclick="searchForCentre()">Search a Centre</button>
+        <button id="selectCentreNextAvailableDate" onclick="selectCentreNextAvailableDate()">Select centre for next available date</button>
+        <button id="bookStartEndDate" onclick="bookStartEndDate()">Book Start and End Date</button>
+        
+    </div>
+
+
+    <div class="container" data-container="7">
+        <h1>Search for a Centre:</h1>
+        <input type="text" id="typedSearchedCentre" name="typedSearchedCentre" placeholder="Centre Name" />
+        <button id="searchCentre" onclick="searchCentre()">Search Centre</button>
+    </div>
+
+    <div class="container" data-container="8">
+        
+        <input type="text" id="typedSelectedCentre" name="typedSelectedCentre" placeholder="Centre Name" />
+        <button id="selectCentre" onclick="selectCentre()">Select Centre</button>
+        <button id="backButton" onclick="backButton('6')">Back</button>
+    </div>
+    
+    <div class="container" data-container="9">
+        
+        <input type="text" id="typedSelectedCentre9" name="typedSelectedCentre9" placeholder="Centre Name" />
+        <input type="text" id="personName" name="personName" placeholder="Enter Person Name" />
+        <br>
+        <input type="datetime-local" id="startDate" name="startDate" min="" placeholder="Start Date"/>
+        <input type="datetime-local" id="endDate" name="endDate" min="" placeholder="End Date" />
+        
+        <br>
+        <button id="addBooking" onclick="addBooking()">Add Booking</button>
+        <button id="backButton" onclick="backButton('6')">Back</button>
+    </div>
+    
+</section>
+
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        var startDate;
+        $("#startDate").on('change', function () {
+            startDate = $(this).val();
+            $("endDate").prop('min', function () {
+                return startDate;
+            })
+        });
+
+        //set startDate id to current date
+        var today = new Date();
+        $("#startDate").prop('min', function () {
+            return today;
+        });
+        
+        
+        
+
+
+
+        
+
+        const tableBody = document.querySelector("#centres-table > tbody");
+        
+        
+        const bookingTableBody = document.querySelector("#bookings-table > tbody");
+        
+        //METHOD NAME: login------------------------------------------------
+        function login() {
+            var username = $("#AdminUsername").val();
+            var password = $("#AdminPassword").val();
+            
+
+            var data = {
+                "username": username,
+                "password": password
+                //  "username": "admin",
+                // "password": "12345admin"
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("Login")",
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    
+                    //changes the number.
+                    changeContainer(2);
+                    
+                    alert("Login Successful, have Admin Rights");
+                },
+                error: function (res, status, error) {
+                    console.log(status);
+                    alert("Incorrect Username or Password");
+
+                }
+            });
+        }
+        //-------------------------------------------------------------------
+
+
+        //METHOD NAME: showAllCentres----------------------------------------
+        //PURPOSE: Populate HTML Table using AJAX
+        function showAllCentres() {        
+
+            //GET ajax
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("ShowAllCentres")",
+                dataType: "json",
+                success: function (result) {
+                    console.log(result);
+
+                    
+                    //POPULATE THE HTML TABLE BODY USING AJAX--------------------------
+                    //const tableBody = document.querySelector("#centres-table > tbody");
+                    console.log(tableBody);
+                    
+                    try {
+                       // const json = JSON.parse(result);
+                        //populateTableBody(json); //Populating the table body
+                        populateTableBody(result); //Populating the table body
+
+                    } catch (e) {
+                        console.warn("Could not load Centres! :(");
+                    }
+                    
+                    
+                    //-----------------------------------------------------------------
+                },
+                error: function (res, status, error) {
+                    console.log(status);
+                }
+            });
+
+            //I think the order matters!!!!
+            changeContainer(3); //Change container to show centre table
+
+            
+        }
+        //-------------------------------------------------------------------
+
+
+        
+
+        //METHOD NAME: addNewCentre------------------------------------------
+        function addNewCentre() {
+
+            changeContainer(4); //Change container to add new centre
+            
+            //POST ajax
+        }
+        //-------------------------------------------------------------------
+
+
+        //METHOD NAME: showCentreBooking-------------------------------------
+        function showCentreBooking() {
+
+            changeContainer(5); //Change container to show centre booking
+            
+        }
+
+
+        //METHOD NAME: getCentreBooking (Button)-----------------------------
+        function getCentreBooking() {
+
+            var centreName = $("#selectedCentre").val();
+
+            var data = {
+                "centreName": centreName
+            };
+
+            //GET ajax
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("ShowCentreBooking")",
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);
+
+                    //POPULATE THE HTML TABLE BODY USING AJAX--------------------------
+                    console.log(bookingTableBody);
+
+                    try {
+                        // const json = JSON.parse(result);
+                        //populateTableBody(json); //Populating the table body
+                        populateBookingTableBody(result); //Populating the table body /////////////////////////////////
+
+                    } catch (e) {
+                        console.warn("Could not load Centres! :(");
+                    }
+
+
+                    //-----------------------------------------------------------------
+                },
+                error: function (res, status, error) {
+                    console.log(status);
+                }
+            });
+        
+        }
+        //---------------------------------------------------------------------
+
+
+        //METHOD NAME: addCentre (BUTTON)---------------------------------------
+        function addCentre() {
+
+            var centreName = $("#CentreName").val();
+
+            var data = {
+                "centreName": centreName
+            };
+
+            //GET ajax
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddCentre")",
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);    
+                    alert("Added Successfully");
+                },
+                error: function (res, status, error) {
+                    console.log(status);
+                }
+            });
+
+        }
+        //----------------------------------------------------------------------
+
+
+
+        //-------------------------------------------------------------------
+        
+        
+        //METHOD NAME: changeContainer
+        //PURPOSE: Responsible for changing the containers without reloading the whole web page.
+        //         To achieve Sigle-Page Web Application.
+        function changeContainer(number) {
+            console.log(number);
+            
+            $(".container").removeClass("is-active");
+            $(".container[data-container='" + number + "']").addClass("is-active");
+        }
+
+
+
+        function backButton(number) {
+            changeContainer(number);
+        }
+
+
+        //------------------------------------------------------------------
+        function populateTableBody(json) {
+            console.log(json);
+
+            //CLEARS OUT EXISTING TABLE BODY DATA---------------------
+            while(tableBody.firstChild) {
+
+                tableBody.removeChild(tableBody.firstChild);
+            }
+            //-------------------------------------------------------
+
+            //POPULATE TABLE
+            json.forEach((row) => {
+                console.log(row);
+
+                //use lower case (id, name), must match the JSON parameter
+                console.log(row.id);
+                console.log(row.name);
+
+                //create the <tr></tr> and <td></td>
+                const tr = document.createElement("tr");
+
+                //<td></td>  ----FIRST COLUMN
+                var tdOne = tr.appendChild(document.createElement("td"));
+                //<td></td>  ----SECOND COLUMN
+                var tdTwo = tr.appendChild(document.createElement("td"));
+
+                tdOne.innerHTML = row.id;
+                tdTwo.innerHTML = row.name;
+
+                tableBody.appendChild(tr);
+                
+
+            });
+        }
+
+        //-------------------------------------------------------------------
+        function populateBookingTableBody(json) {
+            console.log(json)
+
+            //CLEARS OUT EXISTING TABLE BODY DATA
+            while (bookingTableBody.firstChild) {
+
+                bookingTableBody.removeChild(bookingTableBody.firstChild);
+            }
+
+            //POPULATE TABLE
+            json.forEach((row) => {
+                console.log(row);
+
+                //use lower case (id, name), must match the JSON parameter
+                console.log(row.id);
+                console.log(row.centerName);
+                console.log(row.bookingPersonName);
+                console.log(row.startDate);
+                console.log(row.endDate);
+
+                //create the <tr></tr> and <td></td>
+                const tr = document.createElement("tr");
+
+                //<td></td>  ----FIRST COLUMN
+                var tdOne = tr.appendChild(document.createElement("td"));
+                //<td></td>  ----SECOND COLUMN
+                var tdTwo = tr.appendChild(document.createElement("td"));
+                //<td></td>  ----THIRD COLUMN
+                var tdThree = tr.appendChild(document.createElement("td"));
+                //<td></td>  ----FOURTH COLUMN
+                var tdFour = tr.appendChild(document.createElement("td"));
+                //<td></td>  ----FIFTH COLUMN
+                var tdFive = tr.appendChild(document.createElement("td"));
+
+                tdOne.innerHTML = row.id;
+                tdTwo.innerHTML = row.centerName;
+                tdThree.innerHTML = row.bookingPersonName;
+                tdFour.innerHTML = row.startDate;
+                tdFive.innerHTML = row.endDate;
+
+                bookingTableBody.appendChild(tr);
+                
+            });
+        }
+
+
+
+
+
+
+
+
+        /****************************************************************** */
+        //FOR USERS
+        function searchForCentre() {
+            changeContainer(7);
+        }
+
+
+        function user() {
+            changeContainer(6);
+        }
+        
+        function searchCentre() {
+            var centreName = $("#typedSearchedCentre").val();
+
+            var data = {
+                "centreName": centreName
+            };
+
+            //GET ajax
+            $.ajax({
+                type: "GET",
+                url: "@Url.Action("SearchCentre")",
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);
+
+                    alert("Found Matching Centre");
+
+                    changeContainer(6);
+                    
+                },
+                error: function (res, status, error) {
+                    console.log(status);
+
+                    alert("No Matching Centre Found");
+                    
+                    changeContainer(6);
+                }
+
+            });
+        }
+
+
+
+        function bookStartEndDate() {
+            
+            changeContainer(9); //Change container to show centre table
+
+            //startDate.min = new Date().toISOString().split("T")[0];
+            
+        }
+
+
+        function selectCentreNextAvailableDate() {
+            changeContainer(8);
+        }
+
+
+
+        function addBooking() {
+            var centreName = $("#typedSelectedCentre9").val();
+            var bookingPersonName = $("#personName").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+
+            var data = {
+                "centreName": centreName,
+                "bookingPersonName": bookingPersonName,
+                "startDate": startDate,
+                "endDate": endDate
+            };
+            
+            console.log("[data below]");
+            console.log(data);
+
+            //GET ajax
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("AddBooking")",
+                dataType: "json",
+                data: data,
+                success: function (result) {
+                    console.log(result);
+                    alert("Added Successfully");
+                },
+                error: function (res, status, error) {
+                    //console.log(res + "," + status + "," + error);
+                    console.log(status);
+                    alert("ERROR: duplicated bookings/empty fields/invalid centre name");
+                   // alert(error);
+                }
+            });
+        }
+
+    </script>
+}
